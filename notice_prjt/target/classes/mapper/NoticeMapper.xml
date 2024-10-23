@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.human.notice.repository.NoticeDAO">
+    <select id="getNoticeList" parameterType="SearchVO" resultType="NoticeVO">
+        SELECT * FROM tb_notice
+        WHERE (n_title LIKE CONCAT('%', #{keyword}, '%') OR n_content LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY n_idx DESC
+    </select>
+
+    <select id="getNotice" parameterType="int" resultType="NoticeVO">
+        SELECT * FROM tb_notice WHERE n_idx = #{nIdx}
+    </select>
+
+    <insert id="insertNotice" parameterType="NoticeVO">
+        INSERT INTO tb_notice (n_category, n_title, n_content, n_status)
+        VALUES (#{nCategory}, #{nTitle}, #{nContent}, #{nStatus})
+    </insert>
+
+    <update id="updateNotice" parameterType="NoticeVO">
+        UPDATE tb_notice SET n_title = #{nTitle}, n_content = #{nContent}, n_update = NOW()
+        WHERE n_idx = #{nIdx}
+    </update>
+
+    <delete id="deleteNotice" parameterType="int">
+        DELETE FROM tb_notice WHERE n_idx = #{nIdx}
+    </delete>
+</mapper>
